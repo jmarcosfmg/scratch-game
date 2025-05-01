@@ -42,7 +42,7 @@ public class ScratchValidator {
                 case ("vertically_linear_symbols") -> new VerticallyLinearSymbols(combination.getValue().rewardMultiplier, combination.getValue().coveredAreas);
                 default -> null;
             };
-            if(possibleCombinations != null) possibleCombinations.put(combination.getKey(), c);
+            if(c != null) possibleCombinations.put(combination.getKey(), c);
         }
     }
 
