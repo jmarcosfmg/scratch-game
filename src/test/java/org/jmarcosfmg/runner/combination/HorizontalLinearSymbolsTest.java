@@ -10,11 +10,11 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class VerticallyLinearSymbolsTest {
+class HorizontalLinearSymbolsTest {
 
-    private VerticallyLinearSymbols verticallyLinearSymbols;
 
-    private final WinCombinationConfig config = buildCombinationConfig();
+    private HorizontalLinearSymbols horizontalLinearSymbols;
+    private WinCombinationConfig config = buildCombinationConfig();
 
     @Test
     public void shouldReturnNoValidSymbols() {
@@ -24,40 +24,39 @@ class VerticallyLinearSymbolsTest {
                 {"G", "H", "I"}
         };
 
+
         List<List<String>> coveredAreas = new ArrayList<>();
         coveredAreas.add(List.of(new String[]{"0:0", "1:0", "2:0"}));
         coveredAreas.add(List.of(new String[]{"0:1", "1:2", "2:1"}));
         coveredAreas.add(List.of(new String[]{"0:2", "1:2", "2:2"}));
-        config.coveredAreas = coveredAreas;
+        this.config.coveredAreas = coveredAreas;
 
-        verticallyLinearSymbols = new VerticallyLinearSymbols("vertical", config);
+        horizontalLinearSymbols = new HorizontalLinearSymbols("horizontal", config);
 
-        assertTrue(verticallyLinearSymbols.validate(scratchGameSymbols).isEmpty());
+        assertTrue(horizontalLinearSymbols.validate(scratchGameSymbols).isEmpty());
     }
 
     @Test
     public void shouldReturnValidSymbolsInsideOfCoveredArea() {
         String[][] scratchGameSymbols = new String[][]{
-                {"A", "B", "D"},
-                {"A", "B", "C"},
-                {"A", "H", "C"}
+                {"A", "A", "A"},
+                {"C", "B", "B"},
+                {"C", "A", "C"}
         };
 
         List<List<String>> coveredAreas = new ArrayList<>();
         coveredAreas.add(List.of(new String[]{"0:0", "1:0", "2:0"}));
-        coveredAreas.add(List.of(new String[]{"0:1", "1:1", "2:1"}));
-        coveredAreas.add(List.of(new String[]{"0:2", "", "2:2"}));
-        config.coveredAreas = coveredAreas;
+        coveredAreas.add(List.of(new String[]{"", "1:1", "2:1"}));
+        coveredAreas.add(List.of(new String[]{"0:2", "1:2", "2:2"}));
+        this.config.coveredAreas = coveredAreas;
 
-        verticallyLinearSymbols = new VerticallyLinearSymbols("vertical", config);
-        Set<String> validSymbols = verticallyLinearSymbols.validate(scratchGameSymbols);
-
+        horizontalLinearSymbols = new HorizontalLinearSymbols("horizontal", config);
+        Set<String> validSymbols = horizontalLinearSymbols.validate(scratchGameSymbols);
 
         assertTrue(validSymbols.contains("A"));
         assertTrue(validSymbols.contains("B"));
         assertFalse(validSymbols.contains("C"));
     }
-
 
     private WinCombinationConfig buildCombinationConfig() {
         WinCombinationConfig config = new WinCombinationConfig();
