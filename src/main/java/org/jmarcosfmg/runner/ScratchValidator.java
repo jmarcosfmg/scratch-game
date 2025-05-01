@@ -38,11 +38,11 @@ public class ScratchValidator {
         possibleCombinations = new HashMap<>();
         for (Map.Entry<String, WinCombinationConfig> combination : winCombinations.entrySet()) {
             WinCombination c = switch (combination.getValue().group) {
-                case ("same_symbols") ->
-                        new SameSymbolsCombination(combination.getKey(), combination.getValue().count, combination.getValue().rewardMultiplier);
-                default -> new VerticallyLinearSymbols(combination.getValue().rewardMultiplier);
+                case ("same_symbols") -> new SameSymbolsCombination(combination.getKey(), combination.getValue().count, combination.getValue().rewardMultiplier);
+                case ("vertically_linear_symbols") -> new VerticallyLinearSymbols(combination.getValue().rewardMultiplier, combination.getValue().coveredAreas);
+                default -> null;
             };
-            possibleCombinations.put(combination.getKey(), c);
+            if(possibleCombinations != null) possibleCombinations.put(combination.getKey(), c);
         }
     }
 
