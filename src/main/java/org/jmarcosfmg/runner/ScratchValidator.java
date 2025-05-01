@@ -1,5 +1,6 @@
 package org.jmarcosfmg.runner;
 
+import org.jmarcosfmg.runner.combination.HorizontalLinearSymbols;
 import org.jmarcosfmg.runner.combination.SameSymbolsCombination;
 import org.jmarcosfmg.runner.combination.VerticallyLinearSymbols;
 import org.jmarcosfmg.runner.combination.WinCombination;
@@ -38,8 +39,9 @@ public class ScratchValidator {
         possibleCombinations = new HashMap<>();
         for (Map.Entry<String, WinCombinationConfig> combination : winCombinations.entrySet()) {
             WinCombination c = switch (combination.getValue().group) {
-                case ("same_symbols") -> new SameSymbolsCombination(combination.getKey(), combination.getValue().count, combination.getValue().rewardMultiplier);
-                case ("vertically_linear_symbols") -> new VerticallyLinearSymbols(combination.getValue().rewardMultiplier, combination.getValue().coveredAreas);
+                case ("same_symbols") -> new SameSymbolsCombination(combination.getKey(), combination.getValue());
+                case ("vertically_linear_symbols") -> new VerticallyLinearSymbols(combination.getKey(), combination.getValue());
+                case ("horizontally_linear_symbols") -> new HorizontalLinearSymbols(combination.getKey(), combination.getValue());
                 default -> null;
             };
             if(c != null) possibleCombinations.put(combination.getKey(), c);
@@ -74,14 +76,14 @@ public class ScratchValidator {
     public Map<String, Set<String>> validateWinningCombinations(String[][] symbols) {
         Map<String, Map<String, WinCombination>> symbolWinningCombinations = new HashMap<>();
 
-        possibleCombinations.forEach((_, validator) -> {
+        possibleCombinations.forEach((x, validator) -> {
             Set<String> matchedSymbols = validator.validate(symbols);
 
             for (String symbol : matchedSymbols) {
                 symbolWinningCombinations
                         .computeIfAbsent(symbol, _ -> new HashMap<>())
                         .merge(
-                                validator.getType(),
+                                validator.getGroup(),
                                 validator,
                                 (existing, incoming) -> incoming.getRewardMultiplier() > existing.getRewardMultiplier() ? incoming : existing
                         );

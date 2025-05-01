@@ -1,14 +1,21 @@
 package org.jmarcosfmg.runner.combination;
 
+import org.jmarcosfmg.runner.dto.config.WinCombinationConfig;
+
 import java.util.Set;
 
 public abstract class WinCombination {
 
     protected Double rewardMultiplier;
 
-    protected String type;
+    protected String group;
 
     public String name;
+
+    WinCombination(WinCombinationConfig config){
+        this.rewardMultiplier = config.rewardMultiplier;
+        this.group = config.group;
+    }
 
     public abstract Set<String> validate(String[][] symbols);
 
@@ -16,7 +23,7 @@ public abstract class WinCombination {
         return rewardMultiplier;
     }
 
-    public String getType() {
-        return type;
+    public String getGroup() {
+        return group;
     }
 }

@@ -1,5 +1,7 @@
 package org.jmarcosfmg.runner.combination;
 
+import org.jmarcosfmg.runner.dto.config.WinCombinationConfig;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -8,9 +10,10 @@ public class VerticallyLinearSymbols extends WinCombination {
 
     private final List<List<String>> coveredAreas;
 
-    public VerticallyLinearSymbols(Double multiplier, List<List<String>> coveredAreas) {
-        this.rewardMultiplier = multiplier;
-        this.coveredAreas = coveredAreas;
+    public VerticallyLinearSymbols(String name, WinCombinationConfig config) {
+        super(config);
+        this.name = name;
+        this.coveredAreas = config.coveredAreas;
     }
 
     public Set<String> validate(String[][] symbols) {

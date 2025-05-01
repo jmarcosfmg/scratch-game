@@ -8,6 +8,16 @@ public class StandardSymbolProbabilityConfig {
     public int row;
     public Map<String, Integer> symbols;
 
+    public StandardSymbolProbabilityConfig(int column, int row, Map<String, Integer> symbols) {
+        this.column = column;
+        this.row = row;
+        this.symbols = symbols;
+    }
+
+    public StandardSymbolProbabilityConfig() {
+    }
+
+
     public String random(Random randomizer) {
         double rand = randomizer.nextDouble(1D);
         double symbolSum = symbols.values().stream().reduce(0, Integer::sum);

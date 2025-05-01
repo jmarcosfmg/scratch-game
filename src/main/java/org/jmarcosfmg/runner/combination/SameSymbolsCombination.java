@@ -1,5 +1,7 @@
 package org.jmarcosfmg.runner.combination;
 
+import org.jmarcosfmg.runner.dto.config.WinCombinationConfig;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,10 +11,10 @@ public class SameSymbolsCombination extends WinCombination {
 
     int count;
 
-    public SameSymbolsCombination(String name, int count, Double multiplier) {
-        this.count = count;
-        this.rewardMultiplier = multiplier;
+    public SameSymbolsCombination(String name, WinCombinationConfig config) {
+        super(config);
         this.name = name;
+        this.count = config.count;
     }
 
     @Override
