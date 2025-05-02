@@ -65,7 +65,6 @@ public class Main {
         String appliedBonusSymbol = validator.validateBonusSymbols(matrix);
         Double reward = validator.computeWinnings(bettingAmount, matrix);
 
-        Output output = new Output(matrix, reward, appliedWinningCombinations, appliedBonusSymbol);
-        return output;
+        return new Output(matrix, reward, appliedWinningCombinations, appliedBonusSymbol);
     }
 }

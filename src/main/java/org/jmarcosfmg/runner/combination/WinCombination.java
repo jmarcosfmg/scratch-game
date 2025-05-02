@@ -10,7 +10,7 @@ public abstract class WinCombination {
 
     protected String group;
 
-    public String name;
+    protected String name;
 
     WinCombination(WinCombinationConfig config){
         this.rewardMultiplier = config.rewardMultiplier;
@@ -26,4 +26,10 @@ public abstract class WinCombination {
     public String getGroup() {
         return group;
     }
+
+
+    public String getName() {
+        return name;
+    }
+
 }

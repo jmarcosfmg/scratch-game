@@ -74,7 +74,7 @@ public class ScratchValidator {
     public Map<String, Set<String>> validateWinningCombinations(String[][] symbols) {
         Map<String, Map<String, WinCombination>> symbolWinningCombinations = new HashMap<>();
 
-        possibleCombinations.forEach((name, winCombination) -> {
+        possibleCombinations.forEach((_, winCombination) -> {
             Set<String> matchedSymbols = winCombination.validate(symbols);
             for (String symbol : matchedSymbols) {
                 symbolWinningCombinations.computeIfAbsent(symbol, _ -> new HashMap<>());
@@ -91,7 +91,7 @@ public class ScratchValidator {
         symbolWinningCombinations.forEach((symbol, combinations) -> {
             winningCombinationNames.put(symbol, new HashSet<>());
             combinations.forEach((_, combination) -> {
-                winningCombinationNames.get(symbol).add(combination.name);
+                winningCombinationNames.get(symbol).add(combination.getName());
             });
 
         });

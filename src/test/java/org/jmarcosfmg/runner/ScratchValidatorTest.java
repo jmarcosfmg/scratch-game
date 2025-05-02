@@ -12,7 +12,7 @@ import java.util.Set;
 class ScratchValidatorTest {
 
     private ScratchValidator scratchValidator;
-    private Config config = buildConfig();
+    private final Config config = buildConfig();
 
     @Test
     public void shouldReturnOnlyOneTypeOfWinCombinationPerType(){

@@ -1,5 +1,15 @@
-s# Home Assignment: Scratch Game #
+# Home Assignment: Scratch Game #
 
+## How to run ##
+
+Inside of the project folder, run the following commands:
+
+``
+mvn clean package
+``
+
+``
+java -jar target\scratch-game-1.0-SNAPSHOT.jar --config "src\main\resources\config.json" --betting-amount 50``
 
 ## Requirements ##
 

@@ -14,7 +14,7 @@ class LinearSymbolsCombinationTest {
 
 
     private LinearSymbolsCombination linearSymbolsCombination;
-    private WinCombinationConfig config = buildCombinationConfig();
+    private final WinCombinationConfig config = buildCombinationConfig();
 
     @Test
     public void shouldReturnNoValidSymbols() {
