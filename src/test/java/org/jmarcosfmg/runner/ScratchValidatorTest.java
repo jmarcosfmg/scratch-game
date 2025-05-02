@@ -19,7 +19,7 @@ class ScratchValidatorTest {
         String[][] scratchGameSymbols = new String[][]{
                 {"A", "B", "B"},
                 {"B", "A", "B"},
-                {"B", "MISS", "B"}
+                {"B", "B", "MISS"}
         };
         scratchValidator = new ScratchValidator(config);
 
@@ -31,6 +31,27 @@ class ScratchValidatorTest {
 
     @Test
     public void shouldReturnMultipleWinCombinations(){
+        String[][] scratchGameSymbols = new String[][]{
+                {"A", "B", "B"},
+                {"B", "A", "B"},
+                {"B", "B", "B"}
+        };
+        scratchValidator = new ScratchValidator(config);
+
+        Map<String, Set<String>> winningCombinations = scratchValidator.validateWinningCombinations(scratchGameSymbols);
+
+        Assertions.assertFalse(winningCombinations.containsKey("A"));
+        Assertions.assertTrue(winningCombinations.containsKey("B"));
+
+        Set<String> matchedWithB = winningCombinations.get("B");
+        Assertions.assertEquals(2, matchedWithB.size());
+        Assertions.assertTrue(matchedWithB.contains("same_symbols_horizontally"));
+        Assertions.assertTrue(matchedWithB.contains("same_symbol_4_times"));
+
+    }
+
+    @Test
+    public void shouldComputeWinnings(){
         String[][] scratchGameSymbols = new String[][]{
                 {"A", "B", "B"},
                 {"B", "A", "B"},
@@ -83,20 +104,23 @@ class ScratchValidatorTest {
         sameSymbol3.rewardMultiplier = 1.5;
         sameSymbol3.count = 3;
         sameSymbol3.group = "same_symbols";
+        sameSymbol3.when = "same_symbols";
 
         WinCombinationConfig sameSymbol4 = new WinCombinationConfig();
-        sameSymbol4.rewardMultiplier = 1.5;
+        sameSymbol4.rewardMultiplier = 2.0;
         sameSymbol4.count = 4;
+        sameSymbol4.when = "same_symbols";
         sameSymbol4.group = "same_symbols";
 
 
         WinCombinationConfig horizontalCombination = new WinCombinationConfig();
         List<List<String>> coveredAreas = new ArrayList<>();
-        coveredAreas.add(List.of(new String[]{"0:0", "1:0", "2:0"}));
-        coveredAreas.add(List.of(new String[]{"0:1", "1:2", "2:1"}));
-        coveredAreas.add(List.of(new String[]{"0:2", "1:2", "2:2"}));
+        coveredAreas.add(List.of(new String[]{"0:0", "0:1", "0:2"}));
+        coveredAreas.add(List.of(new String[]{"1:0", "1:1", "1:2"}));
+        coveredAreas.add(List.of(new String[]{"2:0", "2:1", "2:2"}));
         horizontalCombination.rewardMultiplier = 1.1;
         horizontalCombination.group = "horizontally_linear_symbols";
+        horizontalCombination.when = "linear_symbols";
         horizontalCombination.coveredAreas = coveredAreas;
 
         return Map.of(

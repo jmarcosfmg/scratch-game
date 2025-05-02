@@ -10,10 +10,10 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class HorizontalLinearSymbolsTest {
+class LinearSymbolsCombinationTest {
 
 
-    private HorizontalLinearSymbols horizontalLinearSymbols;
+    private LinearSymbolsCombination linearSymbolsCombination;
     private WinCombinationConfig config = buildCombinationConfig();
 
     @Test
@@ -31,9 +31,9 @@ class HorizontalLinearSymbolsTest {
         coveredAreas.add(List.of(new String[]{"0:2", "1:2", "2:2"}));
         this.config.coveredAreas = coveredAreas;
 
-        horizontalLinearSymbols = new HorizontalLinearSymbols("horizontal", config);
+        linearSymbolsCombination = new LinearSymbolsCombination("horizontal", config);
 
-        assertTrue(horizontalLinearSymbols.validate(scratchGameSymbols).isEmpty());
+        assertTrue(linearSymbolsCombination.validate(scratchGameSymbols).isEmpty());
     }
 
     @Test
@@ -45,13 +45,13 @@ class HorizontalLinearSymbolsTest {
         };
 
         List<List<String>> coveredAreas = new ArrayList<>();
-        coveredAreas.add(List.of(new String[]{"0:0", "1:0", "2:0"}));
-        coveredAreas.add(List.of(new String[]{"", "1:1", "2:1"}));
-        coveredAreas.add(List.of(new String[]{"0:2", "1:2", "2:2"}));
+        coveredAreas.add(List.of(new String[]{"0:0", "0:1", "0:1"}));
+        coveredAreas.add(List.of(new String[]{"", "1:1", "1:2"}));
+        coveredAreas.add(List.of(new String[]{"2:0", "2:1", "2:2"}));
         this.config.coveredAreas = coveredAreas;
 
-        horizontalLinearSymbols = new HorizontalLinearSymbols("horizontal", config);
-        Set<String> validSymbols = horizontalLinearSymbols.validate(scratchGameSymbols);
+        linearSymbolsCombination = new LinearSymbolsCombination("horizontal", config);
+        Set<String> validSymbols = linearSymbolsCombination.validate(scratchGameSymbols);
 
         assertTrue(validSymbols.contains("A"));
         assertTrue(validSymbols.contains("B"));

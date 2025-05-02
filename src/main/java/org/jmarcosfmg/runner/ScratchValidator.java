@@ -1,8 +1,7 @@
 package org.jmarcosfmg.runner;
 
-import org.jmarcosfmg.runner.combination.HorizontalLinearSymbols;
+import org.jmarcosfmg.runner.combination.LinearSymbolsCombination;
 import org.jmarcosfmg.runner.combination.SameSymbolsCombination;
-import org.jmarcosfmg.runner.combination.VerticallyLinearSymbols;
 import org.jmarcosfmg.runner.combination.WinCombination;
 import org.jmarcosfmg.runner.dto.config.Config;
 import org.jmarcosfmg.runner.dto.config.SymbolConfig;
@@ -11,10 +10,10 @@ import org.jmarcosfmg.runner.symbol.Symbol;
 import org.jmarcosfmg.runner.symbol.SymbolType;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ScratchValidator {
 
@@ -38,10 +37,9 @@ public class ScratchValidator {
     private void buildCombinations(Map<String, WinCombinationConfig> winCombinations) {
         possibleCombinations = new HashMap<>();
         for (Map.Entry<String, WinCombinationConfig> combination : winCombinations.entrySet()) {
-            WinCombination c = switch (combination.getValue().group) {
+            WinCombination c = switch (combination.getValue().when) {
                 case ("same_symbols") -> new SameSymbolsCombination(combination.getKey(), combination.getValue());
-                case ("vertically_linear_symbols") -> new VerticallyLinearSymbols(combination.getKey(), combination.getValue());
-                case ("horizontally_linear_symbols") -> new HorizontalLinearSymbols(combination.getKey(), combination.getValue());
+                case ("linear_symbols") -> new LinearSymbolsCombination(combination.getKey(), combination.getValue());
                 default -> null;
             };
             if(c != null) possibleCombinations.put(combination.getKey(), c);
@@ -76,31 +74,29 @@ public class ScratchValidator {
     public Map<String, Set<String>> validateWinningCombinations(String[][] symbols) {
         Map<String, Map<String, WinCombination>> symbolWinningCombinations = new HashMap<>();
 
-        possibleCombinations.forEach((x, validator) -> {
-            Set<String> matchedSymbols = validator.validate(symbols);
-
+        possibleCombinations.forEach((name, winCombination) -> {
+            Set<String> matchedSymbols = winCombination.validate(symbols);
             for (String symbol : matchedSymbols) {
-                symbolWinningCombinations
-                        .computeIfAbsent(symbol, _ -> new HashMap<>())
-                        .merge(
-                                validator.getGroup(),
-                                validator,
-                                (existing, incoming) -> incoming.getRewardMultiplier() > existing.getRewardMultiplier() ? incoming : existing
-                        );
+                symbolWinningCombinations.computeIfAbsent(symbol, _ -> new HashMap<>());
+
+                symbolWinningCombinations.get(symbol).merge(
+                        winCombination.getGroup(),
+                        winCombination,
+                        (input, existing) -> (input.getRewardMultiplier() > existing.getRewardMultiplier())? input : existing
+                );
             }
         });
 
-        Map<String, Set<String>> winningCombinations = new HashMap<>();
-        for (Map.Entry<String, Map<String, WinCombination>> entry : symbolWinningCombinations.entrySet()) {
-            String symbol = entry.getKey();
-            Set<String> winningCombinationNames = entry.getValue().values().stream()
-                    .map(x -> x.name)
-                    .collect(Collectors.toSet());
+        Map<String, Set<String>> winningCombinationNames = new HashMap<>();
+        symbolWinningCombinations.forEach((symbol, combinations) -> {
+            winningCombinationNames.put(symbol, new HashSet<>());
+            combinations.forEach((_, combination) -> {
+                winningCombinationNames.get(symbol).add(combination.name);
+            });
 
-            winningCombinations.put(symbol, winningCombinationNames);
-        }
+        });
 
-        return winningCombinations;
+        return winningCombinationNames;
     }
 
     public String validateBonusSymbols(String[][] symbols) {

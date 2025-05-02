@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class HorizontalLinearSymbols extends WinCombination {
+public class LinearSymbolsCombination extends WinCombination {
 
     private final List<List<String>> coveredAreas;
 
-    public HorizontalLinearSymbols(String name, WinCombinationConfig config) {
+    public LinearSymbolsCombination(String name, WinCombinationConfig config) {
         super(config);
         this.name = name;
         this.coveredAreas = config.coveredAreas;
